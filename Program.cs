@@ -14,6 +14,9 @@ using Server.Domain.Interface.ClientConnection;
 using Server.Domain.Interface.Group;
 using Server.Domain.Interface.Message;
 using Server.Domain.Interface.User;
+using Hangfire;
+using Hangfire.Storage.SQLite;
+using Server.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -92,6 +95,12 @@ builder.Services.AddScoped<IGroupRepository, GroupRepository>();
 builder.Services.AddScoped<IMessageRepository, MessageRepository>();
 
 
+//add hangfire
+builder.Services.AddHangfire(x =>
+{
+    x.UseSQLiteStorage(connectionString);
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -104,6 +113,15 @@ using (var scope = app.Services.CreateScope())
     var dbContext = scope.ServiceProvider.GetRequiredService<ChatDbContext>();
     dbContext.Database.Migrate();  // Apply any pending migrations
 }
+
+app.UseHangfireServer();
+
+app.UseHangfireDashboard("/hangfire-dashboard", new DashboardOptions()
+{
+    Authorization = new[] { new HangFireAuthorizationFilter() },
+    DashboardTitle = "GamaLearn ChatApp Jobs",
+    AppPath = "/hangfire-dashboard"
+});
 
 app.UseHttpsRedirection();
 
