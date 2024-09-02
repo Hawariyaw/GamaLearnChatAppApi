@@ -105,7 +105,7 @@ builder.Services.AddHangfire(x =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Configure the swagger UI
 
 app.UseSwagger();
 app.UseSwaggerUI();
