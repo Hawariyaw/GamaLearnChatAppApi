@@ -11,7 +11,7 @@ using Server.Infrastructure;
 namespace GamaLearn.ChatService.Infrastructure.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    [Migration("20240902095616_init")]
+    [Migration("20240902101316_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -61,6 +61,26 @@ namespace GamaLearn.ChatService.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Groups");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("6b5dc2b9-85dc-46d9-9ef6-4fefe46754fd"),
+                            GroupName = "Learning Session 1",
+                            UserIds = "[\"CFE11030-8833-4E35-A131-7853021F57E8\"]"
+                        },
+                        new
+                        {
+                            Id = new Guid("57dffbd0-8358-4782-a692-ffa9491dabdb"),
+                            GroupName = "Learning Session 2",
+                            UserIds = "[\"CFE11030-8833-4E35-A131-7853021F57E8\"]"
+                        },
+                        new
+                        {
+                            Id = new Guid("e219e2e9-2c18-4793-9d3b-ef28d697ceed"),
+                            GroupName = "Learning Session 3",
+                            UserIds = "[\"CFE11030-8833-4E35-A131-7853021F57E8\"]"
+                        });
                 });
 
             modelBuilder.Entity("Server.Entity.Message", b =>
@@ -121,10 +141,10 @@ namespace GamaLearn.ChatService.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("4b4e76d1-369e-47a2-9354-387961f84d90"),
+                            Id = new Guid("cfe11030-8833-4e35-a131-7853021f57e8"),
                             FirstName = "Hawariyaw",
                             LastName = "Pawulos",
-                            Password = "$2a$10$iUahWJ7w0NAhtUdNvoG6Ee8e5wEZdttClroo/9Z/ttpRH33rSwj2a",
+                            Password = "$2a$10$bvYXtckRqak5CuXyZvlvL.eckHKqfOieDNcEKOZakEFbPDfwuupVu",
                             UserName = "admin"
                         });
                 });

@@ -3,6 +3,8 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
+#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
+
 namespace GamaLearn.ChatService.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -71,9 +73,19 @@ namespace GamaLearn.ChatService.Infrastructure.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "Groups",
+                columns: new[] { "Id", "GroupName", "UserIds" },
+                values: new object[,]
+                {
+                    { new Guid("57dffbd0-8358-4782-a692-ffa9491dabdb"), "Learning Session 2", "[\"CFE11030-8833-4E35-A131-7853021F57E8\"]" },
+                    { new Guid("6b5dc2b9-85dc-46d9-9ef6-4fefe46754fd"), "Learning Session 1", "[\"CFE11030-8833-4E35-A131-7853021F57E8\"]" },
+                    { new Guid("e219e2e9-2c18-4793-9d3b-ef28d697ceed"), "Learning Session 3", "[\"CFE11030-8833-4E35-A131-7853021F57E8\"]" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "FirstName", "LastName", "Password", "UserName" },
-                values: new object[] { new Guid("4b4e76d1-369e-47a2-9354-387961f84d90"), "Hawariyaw", "Pawulos", "$2a$10$iUahWJ7w0NAhtUdNvoG6Ee8e5wEZdttClroo/9Z/ttpRH33rSwj2a", "admin" });
+                values: new object[] { new Guid("cfe11030-8833-4e35-a131-7853021f57e8"), "Hawariyaw", "Pawulos", "$2a$10$bvYXtckRqak5CuXyZvlvL.eckHKqfOieDNcEKOZakEFbPDfwuupVu", "admin" });
         }
 
         /// <inheritdoc />

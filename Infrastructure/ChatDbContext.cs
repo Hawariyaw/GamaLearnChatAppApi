@@ -22,6 +22,12 @@ namespace Server.Infrastructure
             var user = new User { Id = Guid.NewGuid(), UserName = "admin", FirstName = "Hawariyaw", LastName = "Pawulos", Password = "" };
             user.Password = user.MakePasswordHash("admin");
             modelBuilder.Entity<User>().HasData(user);
+
+            modelBuilder.Entity<GroupConnection>().HasData(
+                new GroupConnection { Id = Guid.NewGuid(), GroupName = "Learning Session 1", UserIds = new List<Guid> { user.Id } },
+                new GroupConnection { Id = Guid.NewGuid(), GroupName = "Learning Session 2", UserIds = new List<Guid> { user.Id } },
+                new GroupConnection { Id = Guid.NewGuid(), GroupName = "Learning Session 3", UserIds = new List<Guid> { user.Id } }
+            );
         }
         
     }
