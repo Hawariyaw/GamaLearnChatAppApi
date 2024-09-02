@@ -99,6 +99,11 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ChatDbContext>();
+    dbContext.Database.Migrate();  // Apply any pending migrations
+}
 
 app.UseHttpsRedirection();
 

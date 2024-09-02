@@ -58,29 +58,36 @@ public class UserController : ControllerBase
     [AllowAnonymous]
     public async Task<ActionResult> Login([FromBody] VerifyDto request)
     {
-        var LoginUser = await _userRepository.VerifyUser(request.UserName, request.Password);
-
-        if(!LoginUser)
+        try
         {
-            return Unauthorized("Invalid Username or Password");
-        }
+            var LoginUser = await _userRepository.VerifyUser(request.UserName, request.Password);
 
-        var user = await _userRepository.GetUserByUserName(request.UserName);
-
-        var tokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
-        var tokenDescriptor = new SecurityTokenDescriptor
-        {
-            Subject = new ClaimsIdentity(new Claim[]
+            if(!LoginUser)
             {
-                new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-            }),
-            Expires = DateTime.UtcNow.AddDays(30),
-            SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-        };
-        var token = tokenHandler.CreateToken(tokenDescriptor);
-        string userToken = tokenHandler.WriteToken(token);
-        return Ok(new { Token = userToken, UserName = user.UserName });
+                return Unauthorized("Invalid Username or Password");
+            }
+
+            var user = await _userRepository.GetUserByUserName(request.UserName);
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var key = Encoding.ASCII.GetBytes(_configuration["Jwt:Key"]);
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new Claim[]
+                {
+                    new Claim(ClaimTypes.Name, user.UserName),
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
+                }),
+                Expires = DateTime.UtcNow.AddDays(30),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            string userToken = tokenHandler.WriteToken(token);
+            return Ok(new { Token = userToken, UserName = user.UserName });
+        }
+        catch(Exception e)
+        {
+            return BadRequest($"Login Failed Due to: {e.Message}");
+        }
     }
 }
