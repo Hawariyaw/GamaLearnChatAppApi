@@ -114,6 +114,16 @@ namespace GamaLearn.ChatService.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("4b4e76d1-369e-47a2-9354-387961f84d90"),
+                            FirstName = "Hawariyaw",
+                            LastName = "Pawulos",
+                            Password = "$2a$10$iUahWJ7w0NAhtUdNvoG6Ee8e5wEZdttClroo/9Z/ttpRH33rSwj2a",
+                            UserName = "admin"
+                        });
                 });
 #pragma warning restore 612, 618
         }

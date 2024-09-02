@@ -69,6 +69,11 @@ namespace GamaLearn.ChatService.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "FirstName", "LastName", "Password", "UserName" },
+                values: new object[] { new Guid("4b4e76d1-369e-47a2-9354-387961f84d90"), "Hawariyaw", "Pawulos", "$2a$10$iUahWJ7w0NAhtUdNvoG6Ee8e5wEZdttClroo/9Z/ttpRH33rSwj2a", "admin" });
         }
 
         /// <inheritdoc />

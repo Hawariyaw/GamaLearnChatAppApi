@@ -13,6 +13,16 @@ namespace Server.Infrastructure
         public ChatDbContext(DbContextOptions<ChatDbContext> options) : base(options)
         {
         }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            // Seed data here
+            var user = new User { Id = Guid.NewGuid(), UserName = "admin", FirstName = "Hawariyaw", LastName = "Pawulos", Password = "" };
+            user.Password = user.MakePasswordHash("admin");
+            modelBuilder.Entity<User>().HasData(user);
+        }
         
     }
 }
