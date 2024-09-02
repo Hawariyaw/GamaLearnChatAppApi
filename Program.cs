@@ -71,7 +71,7 @@ builder.Services.AddCors(options =>
              builder =>
              {
                  builder
-                 .WithOrigins("http://localhost:3000") 
+                 .WithOrigins("https://corechatappclient-bgc7gsemh7h6cxhv.eastus-01.azurewebsites.net/") 
                  .AllowAnyMethod()
                  .AllowAnyHeader()
                  .AllowCredentials();
