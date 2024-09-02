@@ -20,6 +20,8 @@ using Server.Filters;
 
 var builder = WebApplication.CreateBuilder(args);
 
+const string CorsPolicy = "ChatAppOrigins";
+
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<ChatDbContext>(options => options.UseSqlite(connectionString));
 
@@ -70,11 +72,11 @@ builder.Services
 
 builder.Services.AddCors(options =>
      {
-         options.AddPolicy("AllowAll",
-             builder =>
+         options.AddPolicy(CorsPolicy,
+             _builder =>
              {
-                 builder
-                 .WithOrigins("https://corechatappclient-bgc7gsemh7h6cxhv.eastus-01.azurewebsites.net") 
+                 _builder
+                 .WithOrigins(builder.Configuration["Origins:Local"], builder.Configuration["Origins:Production"]) 
                  .AllowAnyMethod()
                  .AllowAnyHeader()
                  .AllowCredentials();
@@ -133,6 +135,6 @@ app.MapControllers();
 
 app.MapHub<ChatHub>("/chat");
 
-app.UseCors("AllowAll");
+app.UseCors(CorsPolicy);
 
 app.Run();
