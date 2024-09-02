@@ -8,6 +8,7 @@ namespace Server.Entity
         public required string ToId { get; set; }
         public required string Content { get; set; }
         public required DateTime SentAt { get; set; }
+        public bool? Delivered { get; set; }
     }
 
     public enum MessageType

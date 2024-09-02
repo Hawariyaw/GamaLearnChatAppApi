@@ -74,7 +74,8 @@ namespace Server.Infrastructure.Hubs
                         FromId = Message.UserName,
                         ToId = Message.ChatRoom,
                         Content = Message.Content,
-                        SentAt = DateTime.Now
+                        SentAt = DateTime.Now,
+                        Delivered = true
                     });
             }
         }

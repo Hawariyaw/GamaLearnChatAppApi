@@ -18,6 +18,13 @@ namespace Server.Infrastructure.Repositories.Message
             await _context.SaveChangesAsync();
             return message;   
         }
+
+        public async Task<Entity.Message?> UpdateMessage(Entity.Message message)
+        {
+            _context.Messages.Update(message);
+            await _context.SaveChangesAsync();
+            return message;
+        }
         
         public async Task<Entity.Message?> GetMessage(Guid Id)
         {
@@ -37,6 +44,11 @@ namespace Server.Infrastructure.Repositories.Message
         public async Task<IEnumerable<Entity.Message>> GetFromMessages(string FromId)
         {
             return await _context.Messages.Where(m => m.FromId == FromId).ToListAsync();
+        }
+
+        public async Task<IEnumerable<Entity.Message>> GetFailedMessages(int batchSize)
+        {
+            return await _context.Messages.Where(m => m.Delivered == false).Take(batchSize).ToListAsync();
         }
 
     }
