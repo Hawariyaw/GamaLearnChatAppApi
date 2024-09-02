@@ -4,6 +4,7 @@ namespace Server.Application.Dto.Request
     {
         public string UserName { get; set; }
         public string ChatRoom { get; set; }
+        public string ToUserName { get; set; }
         public bool IsPrivate { get; set; }
         public string Content { get; set; }
     }

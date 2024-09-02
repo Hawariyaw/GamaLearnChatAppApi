@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.SignalR;
 using Server.Application.Dto.Request;
 using Server.Domain.Interface.ClientConnection;
 using Server.Domain.Interface.Message;
+using Server.Dto.Request;
 using Server.Entity;
 
 namespace Server.Infrastructure.Hubs
@@ -31,7 +32,7 @@ namespace Server.Infrastructure.Hubs
             }
         }
 
-        public async Task JoinSpecificChatRoom(ClientConnection userConnection)
+        public async Task JoinSpecificChatRoom(ConnectionDto userConnection)
         {
             try
             {
@@ -40,10 +41,20 @@ namespace Server.Infrastructure.Hubs
                 if(connection == null)
                 {
                     //add user to chat room
-                    userConnection.Id = userConnection.Id == Guid.Empty ? Guid.NewGuid() : userConnection.Id;
-                    userConnection.ConnectionId = Context.ConnectionId;
-                    connection = await _clientConnectionRepository.CreateConnection(userConnection);
+                    connection = await _clientConnectionRepository.CreateConnection(new ClientConnection
+                    {
+                        Id = new Guid(),
+                        UserId = userConnection.UserId,
+                        ConnectionId = userConnection.ConnectionId,
+                        UserName = userConnection.UserName,
+                        ChatRoom = userConnection.ChatRoom
+                    });
 
+                }
+                //clear existing connection before add
+                if(!string.IsNullOrEmpty(userConnection.PrevChatRoom))
+                {
+                    await Groups.RemoveFromGroupAsync(Context.ConnectionId, userConnection.PrevChatRoom);
                 }
                 await Groups.AddToGroupAsync(Context.ConnectionId, userConnection.ChatRoom);
                 await Clients.Group(userConnection.ChatRoom).SendAsync("JoinSpecificChatRoom", userConnection.UserName, $"{userConnection.UserName} has joined {userConnection.ChatRoom}.");
@@ -65,6 +76,7 @@ namespace Server.Infrastructure.Hubs
                 {
                     await Clients.Group(Message.UserName).SendAsync("ReceiveSpecificChatRoom", Message.UserName, Message.Content);
                     await Clients.Group(Message.ChatRoom).SendAsync("ReceiveSpecificChatRoom", Message.UserName, Message.Content);
+                    await Clients.Group($"{Message.ChatRoom.Split('_')[1]}_{Message.ChatRoom.Split('_')[0]}").SendAsync("ReceiveSpecificChatRoom", Message.UserName, Message.Content);
                 }
                 //save message to database
                 _ = _messageRepository.CreateMessage(new Message
@@ -72,7 +84,7 @@ namespace Server.Infrastructure.Hubs
                         Id = Guid.NewGuid(),
                         MessageType = MessageType.Personal,
                         FromId = Message.UserName,
-                        ToId = Message.ChatRoom,
+                        ToId = Message.ToUserName,
                         Content = Message.Content,
                         SentAt = DateTime.Now,
                         Delivered = true

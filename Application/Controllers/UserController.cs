@@ -64,7 +64,7 @@ public class UserController : ControllerBase
 
             if(!LoginUser)
             {
-                return Unauthorized("Invalid Username or Password");
+                return BadRequest("Invalid Username or Password");
             }
 
             var user = await _userRepository.GetUserByUserName(request.UserName);
