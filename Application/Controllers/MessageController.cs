@@ -58,7 +58,7 @@ public class MessageController : ControllerBase
         return await _messageRepository.GetMessage(Id);
     }
 
-    [HttpGet("AddJobs")]
+    [HttpGet("Message/AddJobs")]
     public IActionResult AddJobs()
     {
         using (var connection = JobStorage.Current.GetConnection())
@@ -73,7 +73,7 @@ public class MessageController : ControllerBase
         return Ok("Jobs done!");
     }
 
-    public async Task CheckFailedMessagesAndResent()
+    private async Task CheckFailedMessagesAndResent()
     {
         var batchSize = _random.Next(15, 35);
         var messages = await _messageRepository.GetFailedMessages(batchSize);
