@@ -11,7 +11,7 @@ using Server.Infrastructure;
 namespace GamaLearn.ChatService.Infrastructure.Migrations
 {
     [DbContext(typeof(ChatDbContext))]
-    [Migration("20240902101316_init")]
+    [Migration("20240902154647_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -65,21 +65,21 @@ namespace GamaLearn.ChatService.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("6b5dc2b9-85dc-46d9-9ef6-4fefe46754fd"),
+                            Id = new Guid("6d311209-1877-4315-8f3c-e995309448aa"),
                             GroupName = "Learning Session 1",
-                            UserIds = "[\"CFE11030-8833-4E35-A131-7853021F57E8\"]"
+                            UserIds = "[\"471EC058-1286-4998-B59B-ACDE81ED3F30\"]"
                         },
                         new
                         {
-                            Id = new Guid("57dffbd0-8358-4782-a692-ffa9491dabdb"),
+                            Id = new Guid("2ab3db1b-6064-47e7-a1a0-dd2d0079247a"),
                             GroupName = "Learning Session 2",
-                            UserIds = "[\"CFE11030-8833-4E35-A131-7853021F57E8\"]"
+                            UserIds = "[\"471EC058-1286-4998-B59B-ACDE81ED3F30\"]"
                         },
                         new
                         {
-                            Id = new Guid("e219e2e9-2c18-4793-9d3b-ef28d697ceed"),
+                            Id = new Guid("b7a3280c-4e33-415a-8d28-e151e163a379"),
                             GroupName = "Learning Session 3",
-                            UserIds = "[\"CFE11030-8833-4E35-A131-7853021F57E8\"]"
+                            UserIds = "[\"471EC058-1286-4998-B59B-ACDE81ED3F30\"]"
                         });
                 });
 
@@ -92,6 +92,9 @@ namespace GamaLearn.ChatService.Infrastructure.Migrations
                     b.Property<string>("Content")
                         .IsRequired()
                         .HasColumnType("TEXT");
+
+                    b.Property<bool?>("Delivered")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("FromId")
                         .IsRequired()
@@ -141,10 +144,10 @@ namespace GamaLearn.ChatService.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("cfe11030-8833-4e35-a131-7853021f57e8"),
+                            Id = new Guid("471ec058-1286-4998-b59b-acde81ed3f30"),
                             FirstName = "Hawariyaw",
                             LastName = "Pawulos",
-                            Password = "$2a$10$bvYXtckRqak5CuXyZvlvL.eckHKqfOieDNcEKOZakEFbPDfwuupVu",
+                            Password = "$2a$10$X0zBaspK3Tw0o43zuxBBLuM0GQ.kNA3a6nux8EXgbXvOkKCDsmvDq",
                             UserName = "admin"
                         });
                 });

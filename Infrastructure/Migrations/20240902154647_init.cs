@@ -50,7 +50,8 @@ namespace GamaLearn.ChatService.Infrastructure.Migrations
                     FromId = table.Column<string>(type: "TEXT", nullable: false),
                     ToId = table.Column<string>(type: "TEXT", nullable: false),
                     Content = table.Column<string>(type: "TEXT", nullable: false),
-                    SentAt = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    SentAt = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    Delivered = table.Column<bool>(type: "INTEGER", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -77,15 +78,15 @@ namespace GamaLearn.ChatService.Infrastructure.Migrations
                 columns: new[] { "Id", "GroupName", "UserIds" },
                 values: new object[,]
                 {
-                    { new Guid("57dffbd0-8358-4782-a692-ffa9491dabdb"), "Learning Session 2", "[\"CFE11030-8833-4E35-A131-7853021F57E8\"]" },
-                    { new Guid("6b5dc2b9-85dc-46d9-9ef6-4fefe46754fd"), "Learning Session 1", "[\"CFE11030-8833-4E35-A131-7853021F57E8\"]" },
-                    { new Guid("e219e2e9-2c18-4793-9d3b-ef28d697ceed"), "Learning Session 3", "[\"CFE11030-8833-4E35-A131-7853021F57E8\"]" }
+                    { new Guid("2ab3db1b-6064-47e7-a1a0-dd2d0079247a"), "Learning Session 2", "[\"471EC058-1286-4998-B59B-ACDE81ED3F30\"]" },
+                    { new Guid("6d311209-1877-4315-8f3c-e995309448aa"), "Learning Session 1", "[\"471EC058-1286-4998-B59B-ACDE81ED3F30\"]" },
+                    { new Guid("b7a3280c-4e33-415a-8d28-e151e163a379"), "Learning Session 3", "[\"471EC058-1286-4998-B59B-ACDE81ED3F30\"]" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "FirstName", "LastName", "Password", "UserName" },
-                values: new object[] { new Guid("cfe11030-8833-4e35-a131-7853021f57e8"), "Hawariyaw", "Pawulos", "$2a$10$bvYXtckRqak5CuXyZvlvL.eckHKqfOieDNcEKOZakEFbPDfwuupVu", "admin" });
+                values: new object[] { new Guid("471ec058-1286-4998-b59b-acde81ed3f30"), "Hawariyaw", "Pawulos", "$2a$10$X0zBaspK3Tw0o43zuxBBLuM0GQ.kNA3a6nux8EXgbXvOkKCDsmvDq", "admin" });
         }
 
         /// <inheritdoc />
