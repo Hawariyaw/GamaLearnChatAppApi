@@ -1,4 +1,4 @@
-# Gama Learn Chat App
+# Gama Learn Chat App API
 
 Gama Learn Chat App is a real-time chat application built using .NET 8, C#, SignalR for real-time communication, SQLite as the database, JWT for authentication, and HangFire for job queuing and resending failed chats.
 
