@@ -28,7 +28,6 @@ builder.Services.AddDbContext<ChatDbContext>(options => options.UseSqlite(connec
 // Add services to the container.
 builder.Services.AddSignalR();
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
