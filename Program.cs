@@ -69,6 +69,7 @@ builder.Services
         };
 });
 
+//configure cors
 builder.Services.AddCors(options =>
      {
          options.AddPolicy(CorsPolicy,
