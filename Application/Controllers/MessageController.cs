@@ -32,6 +32,7 @@ public class MessageController : ControllerBase
         _messageRepository = messageRepository;
         _chatHubLogger = chatHubLogger;
         _clientConnectionRepository = clientConnectionRepository;
+        _chatHub = new ChatHub(_chatHubLogger, _clientConnectionRepository, _messageRepository);
     }
 
     [HttpPost("Message")]
@@ -64,6 +65,44 @@ public class MessageController : ControllerBase
         return await _messageRepository.GetMessage(Id);
     }
 
+    [HttpGet("Message/CheckFailedMessagesAndResent")]
+    public async Task<IActionResult> CheckFailedMessagesAndResent()
+    {
+        try
+        {
+            var batchSize = _random.Next(15, 35);
+            var messages = await _messageRepository.GetFailedMessages(batchSize);
+            foreach (var message in messages)
+            {
+
+                // send message again
+                // if success update message.Delivered = true;
+                // else leave it as it is
+                await _chatHub.SendMessage(new MessageDto
+                {
+                    UserName = message.FromId,
+                    ChatRoom = message.ToId,
+                    Content = message.Content,
+                    IsPrivate = message.MessageType == MessageType.Personal
+                });
+
+                var msg = await _messageRepository.GetMessage(message.Id);
+
+                if (msg != null && msg.Delivered == true)
+                {
+                    message.Delivered = true;
+                    await _messageRepository.UpdateMessage(message);
+                }
+            }
+            return Ok("CheckFailedMessagesAndResent done!");
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error in CheckFailedMessagesAndResent");
+            return Ok("Error in CheckFailedMessagesAndResent");
+        }
+    }
+
     [HttpGet("Message/AddJobs")]
     public IActionResult AddJobs()
     {
@@ -77,33 +116,5 @@ public class MessageController : ControllerBase
         _logger.LogInformation("**********************   Adding or Updating Hangfire jobs... ***********************");
         RecurringJob.AddOrUpdate("CheckFailedMessagesAndResent", () => CheckFailedMessagesAndResent(), "*/10 * * * *"); // every 10 minute
         return Ok("Jobs done!");
-    }
-
-    private async Task CheckFailedMessagesAndResent()
-    {
-        var batchSize = _random.Next(15, 35);
-        var messages = await _messageRepository.GetFailedMessages(batchSize);
-        foreach (var message in messages)
-        {
-            // send message again
-            // if success update message.Delivered = true;
-            // else leave it as it is
-            var _chatHub = new ChatHub(_chatHubLogger, _clientConnectionRepository, _messageRepository);
-            await _chatHub.SendMessage(new MessageDto
-            {
-                UserName = message.FromId,
-                ChatRoom = message.ToId,
-                Content = message.Content,
-                IsPrivate = message.MessageType == MessageType.Personal
-            });
-
-            var msg = await _messageRepository.GetMessage(message.Id);
-
-            if (msg.Delivered == true)
-            {
-                message.Delivered = true;
-                await _messageRepository.UpdateMessage(message);
-            }
-        }
     }
 }
